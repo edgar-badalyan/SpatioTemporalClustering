@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% load static %}
+<title>Page Title</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" href="{%static 'map/map.css' %}"/>
+	
+ 
+</head>
+
+<body>
+
+	{% block body_block %}
+	
+	{% endblock %}
+	
+	<form class="point-form" method="POST">
+	  {% csrf_token %}
+	  {{ form.as_p }}
+	  <button type="submit" class="save btn btn-default">Save</button>
+	</form>
+
+	<script src="{%static 'map/point_form.js' %}"></script>
+
+</body>
+</html>

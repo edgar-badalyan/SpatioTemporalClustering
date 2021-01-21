@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% load static %}
+<title>COVID Clustering</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<!-- Bootstrap CSS for buttons -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+	<!-- Leaflet CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+  
+	<!-- Leaflet JS: Make sure you put this AFTER Leaflet's CSS -->
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  
+  
+    <!-- We use jquery for the datepicker -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ 
+    <!-- Personal CSS -->
+    <link rel="stylesheet" href="{%static 'map/map.css' %}"/>
+	
+</head>
+
+<body>
+
+    {% block body_block %}
+
+    <h1> Visualization map</h1>
+
+	<a href="{% url 'map' %}" class="btn btn-primary">Point View</a>
+
+	<a href="{% url 'map_cluster' %}" class="btn btn-primary">Cluster View</a>	
+	
+	<p>Date: <input type="text" id="datepicker"></p>	
+   
+    <!-- Contains the map -->
+    <div id="mapid"></div>
+  
+    <!-- Remove "disabled" to enable button -->
+    <form action="{% url 'generate_points' %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-warning" disabled>Generate random points (DISABLED)</button>
+    </form>
+    
+	
+	<a href="{% url 'new_point_coord' %}" class="btn btn-primary">Add new point</a>	
+
+    <!-- JSON data -->
+  	{{ point_data|json_script:"point_data" }}
+	{{ centroids|json_script:"centroids" }}
+	{{ date|json_script:"date" }}
+	{{ mode|json_script:"mode" }}
+
+    <!-- JS for the datepicker -->
+    <script src="{%static 'map/dates.js' %}"></script>
+	
+	<!-- JS for the map -->
+    <script src="{%static 'map/map.js' %}"></script>
+ 
+    {% endblock %}
+</body>
+
+</html>

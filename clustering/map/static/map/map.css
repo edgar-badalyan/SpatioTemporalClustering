@@ -1,0 +1,18 @@
+#mapid { 
+	width: 600px; 
+	height: 400px; 
+	margin-top: 50px;}
+
+#datepicker{
+	z-index: 10000;
+	position: absolute;
+}
+
+.btn{
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+body{
+	margin-left: 5PX;
+}
