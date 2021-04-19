@@ -30,7 +30,7 @@ class DBSCAN_Clustering:
         
         distance_pairs = haversine_distances(X_rad, X_rad) # 2-D table of haversine distances between each pair of points
 
-        distance_pairs *= 6378137 # multiply by radius of Earth
+        distance_pairs *= 6371000 # multiply by radius of Earth
         
         # epsilon is the max distance for 2 points to be considered "close"
         # in this case, 250 meters. It has been chosen by experimentation.
