@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% load static %}
+<title>Generate Random cases</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" href="{%static 'map/map.css' %}"/>
+	
+ 
+</head>
+
+<body>
+
+	
+	<form action="{% url 'generate' %}" method="POST">
+      {% csrf_token %}
+      <label for="date">Date:</label>
+        <input type="date" name="date" value="2021-01-01"></br>
+      <button type="submit" class="btn btn-primary">Generate</button>
+    </form>
+
+	
+
+</body>
+</html>

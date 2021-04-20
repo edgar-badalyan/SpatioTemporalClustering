@@ -36,4 +36,6 @@ urlpatterns = [
     
     # generate random points
     path('generate_points/', views.add_random_points, name='generate_points'),
+    path('generate/', views.GeneratePointView.as_view(), name='generateView'),
+    path('generate_new/', views.generate_points, name='generate'),
 ]

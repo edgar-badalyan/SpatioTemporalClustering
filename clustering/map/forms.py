@@ -23,3 +23,11 @@ class PointFormAddr(forms.ModelForm):
         fields = ('state', 'address', 'date')
         
         widgets = {}
+        
+
+class GeneratePointsForm(forms.ModelForm):
+    class Meta:
+        model = Point
+        fields = ('date',)
+        
+        widgets = {}

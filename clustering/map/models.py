@@ -6,11 +6,11 @@ from datetime import date
 
 
 class PointManager(models.Manager):
-    def create_point(self, state, lat, lng, address, date=None):
+    def create_point(self, state, lat, lng, address, municipality, date=None):
         if(date==None):
-            return self.create(state=state, latitude=lat, longitude=lng, address=address)
+            return self.create(state=state, latitude=lat, longitude=lng, municipality=municipality, address=address)
         else:
-            return self.create(state=state, latitude=lat, longitude=lng, address=address, date=date)
+            return self.create(state=state, latitude=lat, longitude=lng, municipality=municipality, address=address, date=date)
  
 
 
@@ -36,7 +36,7 @@ class Point(models.Model):
     longitude = models.DecimalField(max_digits=8, decimal_places=5)
     
     address = models.CharField(max_length=512)
-    
+    municipality = models.CharField(max_length=256, default='Unknown')
     date = models.DateField(default=date.today)
     
     

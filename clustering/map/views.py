@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, CreateView
 from map.models import Point
-from map.forms import PointFormCoord, PointFormAddr
+from map.forms import PointFormCoord, PointFormAddr, GeneratePointsForm
 from map.algorithms.dbscan import DBSCAN_Clustering
 import geopy as gp
 from random import randint
-from datetime import date, timedelta
+import datetime
+from map.algorithms.generate_points import PointGenerator
+from geopy.extra.rate_limiter import RateLimiter
 # Create your views here.
 
 class AboutView(TemplateView):
@@ -24,7 +26,7 @@ class MapView(TemplateView):
     template_name = 'map/map.html'
     context_object_name = "data_dict"
     
-    default_date = date(year=2020, month=12, day=27) # default day is 27th of december
+    default_date = datetime.date(year=2020, month=12, day=27) # default day is 27th of december
          
         
     def get_queryset(self, request_date=None):
@@ -48,7 +50,7 @@ class MapView(TemplateView):
             
             # Warning: Python and JS don't put dates is same order:
             # Pay attention to indexes 
-            return date(day=int(date_string[1]), 
+            return datetime.date(day=int(date_string[1]), 
                                 month=int(date_string[0]), 
                                 year=int(date_string[2]))
         else:
@@ -188,6 +190,8 @@ class PointCoordCreateView(CreateView):
         geolocator = gp.Nominatim(user_agent='CovidClusteringLocator')
         self.object.address = geolocator.reverse(str(lat) + ", " + str(lng)).address
         
+        raw_dict = geolocator.reverse(str(lat) + ", " + str(lng)).raw
+        self.object.municipality = raw_dict["address"]["town"]
         
         self.object.save()
 
@@ -219,13 +223,54 @@ class PointAddrCreateView(CreateView):
         self.object.latitude = coords.latitude
         self.object.longitude = coords.longitude
         
+        raw_dict = geolocator.reverse(str(coords.latitude) + ", " + str(coords.longitude)).raw
+        self.object.municipality = raw_dict["address"]["town"]
         
         self.object.save()
 
         return redirect('map')
         
+
+class GeneratePointView(TemplateView):
+    template_name = 'map/generate_point.html'
+    redirect_field_name = 'map/map.html'   
+    model = Point
     
+        
+
+
+def generate_points(request):
+    if request.method == "POST":
+        
+        date_str = request.POST.get('date')
+        
+        date_lst = date_str.split("-")
+        date = datetime.date(year=int(date_lst[0]), month=int(date_lst[1]), day=int(date_lst[2]))
+        print(date)
+        
+        past_points = Point.objects.filter(date__gte=date - datetime.timedelta(days=14),
+                                        date__lte=date)
+
+        pg = PointGenerator(past_points, date)
+        new_points = pg.generate()
+       
+        for point in new_points:
+            lat = point[0][0]
+            lng = point[0][1]
+            municipality = point[1]
+            
+            geolocator = gp.Nominatim(user_agent='CovidClusteringLocator')
+            
+            reverse_geocoder = RateLimiter(geolocator.reverse, min_delay_seconds=1)
+            
+            address = reverse_geocoder(str(lat) + ", " + str(lng)).address
+            
+            p = Point.objects.create_point(1, lat, lng, address, municipality, date)
+            p.save()
+            
+    return redirect('generateView')
     
+
 def add_random_points(request):
     """
     Generate random points and add to dataset
@@ -240,7 +285,7 @@ def add_random_points(request):
             geolocator = gp.Nominatim(user_agent='CovidClusteringLocator')
             address = geolocator.reverse(str(lat) + ", " + str(lng)).address
 
-            p = Point.objects.create_point(1, lat, lng, address, date(year=2020, month=12, day=30))
+            p = Point.objects.create_point(1, lat, lng, address, datetime.date(year=2020, month=12, day=30))
             p.save()
             
     return redirect('map')
