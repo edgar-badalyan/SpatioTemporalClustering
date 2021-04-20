@@ -2,10 +2,10 @@
 An attempt to give a spatial visualisation of coronavirus cases
 
 ## Goal
-This tool tries to help with the visualisation of COVID-19 case by displaying clusters of dense points on a map.
+This tool tries to help with the visualisation of COVID-19 cases by displaying clusters of dense points on a map.
 
 ## Configuration 
-This tool is built with the following :
+This tool is built with the following packages :
 
 * python 3.8.5
 * django 2.2.5
