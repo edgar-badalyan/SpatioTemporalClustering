@@ -1,0 +1,12 @@
+{% extends 'map/map_base.html' %}
+{% load staticfiles %}
+
+{% block script %}
+
+    <!-- cluster data -->
+    {{ centroids|json_script:"centroids" }}
+
+    <!-- JS for clusters -->
+    <script src="{%static 'map/map_clusters.js' %}"></script>
+
+{% endblock %}

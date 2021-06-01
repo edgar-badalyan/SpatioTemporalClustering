@@ -1,5 +1,8 @@
-var latlng_radio = document.querySelector("#latlng");
-var addr_radio = document.querySelector("#addr");
+
+// Used to change address inputting method in new point creation page
+
+const latlng_radio = document.querySelector("#latlng");
+const addr_radio = document.querySelector("#addr");
 
 latlng_radio.addEventListener('change', radioChange);
 

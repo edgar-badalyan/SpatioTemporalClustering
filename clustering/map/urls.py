@@ -23,11 +23,12 @@ urlpatterns = [
     path('about/', views.AboutView.as_view(), name='about'),   
     
     # see the data on default day
-    path('', views.PointView.as_view(), name='map'),
-    path('clusters', views.ClusterView.as_view(), name='map_cluster'),
+    path('', views.ClusterView.as_view(), name='map_clusters'),
+    path('clusters', views.ClusterView.as_view(), name='map_clusters'),
+    path('points', views.PointView.as_view(), name='map_points'),
     
     # see the data on given day
-    path('date/<str:date>', views.PointView.as_view(), name='map_date'),   
+    path('points/date/<str:date>', views.PointView.as_view(), name='map_date'),
     path('clusters/date/<str:date>', views.ClusterView.as_view(), name='map_date_cluster'), 
     
     # add a new point
@@ -35,7 +36,6 @@ urlpatterns = [
     path('new_addr/', views.PointAddrCreateView.as_view(), name='new_point_addr'),
     
     # generate random points
-    path('generate_points/', views.add_random_points, name='generate_points'),
     path('generate/', views.GeneratePointView.as_view(), name='generateView'),
     path('generate_new/', views.generate_points, name='generate'),
 ]

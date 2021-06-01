@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 {% load static %}
 <title>Generate Random cases</title>
@@ -16,8 +16,9 @@
 	
 	<form action="{% url 'generate' %}" method="POST">
       {% csrf_token %}
-      <label for="date">Date:</label>
-        <input type="date" name="date" value="2021-01-01"></br>
+        <label>Date:
+            <input type="date" name="date" value="2021-01-01">
+        </label><br/>
       <button type="submit" class="btn btn-primary">Generate</button>
     </form>
 

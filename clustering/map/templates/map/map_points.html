@@ -1,0 +1,12 @@
+{% extends 'map/map_base.html' %}
+{% load staticfiles %}
+
+{% block script %}
+
+    <!-- point data -->
+    {{ point_data|json_script:"point_data" }}
+
+    <!-- JS for points -->
+    <script src="{%static 'map/map_points.js' %}"></script>
+
+{% endblock %}

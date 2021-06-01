@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 {% load static %}
 <title>COVID Clustering</title>
@@ -28,21 +28,20 @@
 
 <body>
 
-    {% block body_block %}
-
     <h1> Visualization map</h1>
 
-	<a href="{% url 'map' %}" class="btn btn-primary">Point View</a>
+    <a onclick="clusterMode();" class="btn btn-primary">Cluster View</a>
 
-	<a href="{% url 'map_cluster' %}" class="btn btn-primary">Cluster View</a>	
-	
-	<p>Date: <input type="text" id="datepicker"></p>	
+	<a onclick="pointMode();" class="btn btn-primary">Point View</a>
+    <br/>
+	<label for="datepicker">Date: </label>
+    <input type="text" id="datepicker">
    
     <!-- Contains the map -->
     <div id="mapid"></div>
   
     <!-- Remove "disabled" to enable button -->
-    <form action="{% url 'generate_points' %}" method="POST">
+    <form action="{% url 'generateView' %}" method="POST">
       {% csrf_token %}
       <button type="submit" class="btn btn-warning" disabled>Generate random points (DISABLED)</button>
     </form>
@@ -51,18 +50,18 @@
 	<a href="{% url 'new_point_coord' %}" class="btn btn-primary">Add new point</a>	
 
     <!-- JSON data -->
-  	{{ point_data|json_script:"point_data" }}
-	{{ centroids|json_script:"centroids" }}
 	{{ date|json_script:"date" }}
 	{{ mode|json_script:"mode" }}
 
-    <!-- JS for the datepicker -->
-    <script src="{%static 'map/dates.js' %}"></script>
+    <!-- JS for the navigation between dates/modes -->
+    <script src="{%static 'map/navigation.js' %}"></script>
 	
-	<!-- JS for the map -->
-    <script src="{%static 'map/map.js' %}"></script>
- 
-    {% endblock %}
+	<!-- JS for the map is different for points and clusters -->
+    <!-- See map_points.html and map_clusters.html -->
+    {% block script %}
+
+	{% endblock %}
+
 </body>
 
 </html>
